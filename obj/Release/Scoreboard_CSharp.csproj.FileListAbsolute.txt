@@ -1,0 +1,9 @@
+E:\GitHub\Scoreboard_CSharp\bin\Release\Scoreboard_CSharp.exe.config
+E:\GitHub\Scoreboard_CSharp\bin\Release\Scoreboard_CSharp.exe
+E:\GitHub\Scoreboard_CSharp\bin\Release\Scoreboard_CSharp.pdb
+E:\GitHub\Scoreboard_CSharp\bin\Release\NauCom.dll
+E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.TAIFBoard.resources
+E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.Properties.Resources.resources
+E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.csproj.GenerateResource.Cache
+E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.exe
+E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.pdb

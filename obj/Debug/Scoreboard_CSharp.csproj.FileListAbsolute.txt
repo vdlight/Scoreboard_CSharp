@@ -17,3 +17,13 @@ E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.Properties.Resources.res
 E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.csproj.GenerateResource.Cache
 E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.exe
 E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.pdb
+D:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.exe.config
+D:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.exe
+D:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.pdb
+D:\GitHub\Scoreboard_CSharp\bin\Debug\NauCom.dll
+D:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.csprojResolveAssemblyReference.cache
+D:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.TAIFBoard.resources
+D:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.Properties.Resources.resources
+D:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.csproj.GenerateResource.Cache
+D:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.exe
+D:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.pdb

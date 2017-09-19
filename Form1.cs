@@ -114,6 +114,9 @@ namespace Scoreboard_CSharp
         int[] guestPenaltyAlive = new int[3] { 0, 0, 0 };
         int[] guestPenaltyOldVal = new int[3] { 0, 0, 0 };
 
+        string colon = ":";
+        bool colonVisible = true;
+
         public TAIFBoard()
         {
             InitializeComponent();
@@ -422,14 +425,16 @@ namespace Scoreboard_CSharp
             HomeTeam_lbl.Text = HomeTeam_edit.Text;
             GuestTeam_lbl.Text = GuestTeam_edit.Text;
 
+            colon = ":";
+
             //if(data.Count > 0)
             //listBox2.Items.Add(data.Dequeue());
 
 
             // -------------- update clock -------------- 
             Time_lbl.Text =
-                values[(int)defs.MATCH_10_MIN].ToString() + values[(int)defs.MATCH_1_MIN].ToString() +
-                    ":" + values[(int)defs.MATCH_10_SEC].ToString() + values[(int)defs.MATCH_1_SEC].ToString();
+                (values[(int)defs.MATCH_10_MIN] * 10 +  values[(int)defs.MATCH_1_MIN]).ToString() +
+                    colon + (values[(int)defs.MATCH_10_SEC] * 10 + values[(int)defs.MATCH_1_SEC]).ToString();
 
             // -------------- update period -------------- 
             Period_lbl.Text =
@@ -454,42 +459,42 @@ namespace Scoreboard_CSharp
                 values[(int)defs.HOME_PEN1_NR_10].ToString() + values[(int)defs.HOME_PEN1_NR_1].ToString();
             HomePen1Time_lbl.Text =
                 values[(int)defs.HOME_PEN1_MINS].ToString() +
-                    ":" + values[(int)defs.HOME_PEN1_10_SEC].ToString() + values[(int)defs.HOME_PEN1_1_SEC].ToString();
+                    colon + values[(int)defs.HOME_PEN1_10_SEC].ToString() + values[(int)defs.HOME_PEN1_1_SEC].ToString();
             
             // -------------- Home penalty 2 -------------- 
             HomePen2Player_lbl.Text =
                 values[(int)defs.HOME_PEN2_NR_10].ToString() + values[(int)defs.HOME_PEN2_NR_1].ToString();
             HomePen2Time_lbl.Text =
                 values[(int)defs.HOME_PEN2_MINS].ToString() +
-                    ":" + values[(int)defs.HOME_PEN2_10_SEC].ToString() + values[(int)defs.HOME_PEN2_1_SEC].ToString();
+                    colon + values[(int)defs.HOME_PEN2_10_SEC].ToString() + values[(int)defs.HOME_PEN2_1_SEC].ToString();
 
             // -------------- Home penalty 3 -------------- 
             HomePen3Player_lbl.Text =
                 values[(int)defs.HOME_PEN3_NR_10].ToString() + values[(int)defs.HOME_PEN3_NR_1].ToString();
             HomePen3Time_lbl.Text =
                 values[(int)defs.HOME_PEN3_MINS].ToString() +
-                    ":" + values[(int)defs.HOME_PEN3_10_SEC].ToString() + values[(int)defs.HOME_PEN3_1_SEC].ToString();
+                    colon + values[(int)defs.HOME_PEN3_10_SEC].ToString() + values[(int)defs.HOME_PEN3_1_SEC].ToString();
 
             // --------------  Guest penalty 1 -------------- 
             GuestPen1Player_lbl.Text =
                 values[(int)defs.GUEST_PEN1_NR_10].ToString() + values[(int)defs.GUEST_PEN1_NR_1].ToString();
             GuestPen1Time_lbl.Text =
                 values[(int)defs.GUEST_PEN1_MINS].ToString() +
-                    ":" + values[(int)defs.GUEST_PEN1_10_SEC].ToString() + values[(int)defs.GUEST_PEN1_1_SEC].ToString();
+                    colon + values[(int)defs.GUEST_PEN1_10_SEC].ToString() + values[(int)defs.GUEST_PEN1_1_SEC].ToString();
 
             // -------------- Guest penalty 2 -------------- 
             GuestPen2Player_lbl.Text =
                 values[(int)defs.GUEST_PEN2_NR_10].ToString() + values[(int)defs.GUEST_PEN2_NR_1].ToString();
             GuestPen2Time_lbl.Text =
                 values[(int)defs.GUEST_PEN2_MINS].ToString() +
-                    ":" + values[(int)defs.GUEST_PEN2_10_SEC].ToString() + values[(int)defs.GUEST_PEN2_1_SEC].ToString();
+                    colon + values[(int)defs.GUEST_PEN2_10_SEC].ToString() + values[(int)defs.GUEST_PEN2_1_SEC].ToString();
 
             // -------------- Guest penalty 3 -------------- 
             GuestPen3Player_lbl.Text =
                 values[(int)defs.GUEST_PEN3_NR_10].ToString() + values[(int)defs.GUEST_PEN3_NR_1].ToString();
             GuestPen3Time_lbl.Text =
                 values[(int)defs.GUEST_PEN3_MINS].ToString() +
-                    ":" + values[(int)defs.GUEST_PEN3_10_SEC].ToString() + values[(int)defs.GUEST_PEN3_1_SEC].ToString();
+                   colon + values[(int)defs.GUEST_PEN3_10_SEC].ToString() + values[(int)defs.GUEST_PEN3_1_SEC].ToString();
 
 
             
@@ -498,13 +503,15 @@ namespace Scoreboard_CSharp
             {
                 H1_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN1_1_SEC]);
                 H2_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN2_1_SEC]);
-                H3_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN3_1_SEC]);
+          //      H3_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN3_1_SEC]);
 
                 G1_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN1_1_SEC]);
                 G2_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN2_1_SEC]);
-                G3_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN3_1_SEC]);
+             //   G3_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN3_1_SEC]);
+                colonVisible = !colonVisible;
             }
             oldSec = values[(int)defs.MATCH_1_SEC];
+
             
         }
     
@@ -517,7 +524,7 @@ namespace Scoreboard_CSharp
 
         private void NC_NauBeeTextUpdate(int Adress, string Text)
         {
-            //Console.WriteLine(Text);
+            Console.WriteLine(Text);
         }
 
         private static int OldDot253Val = 0;

@@ -7,3 +7,12 @@ E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.Properties.Resources.r
 E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.csproj.GenerateResource.Cache
 E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.exe
 E:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.pdb
+D:\GitHub\Scoreboard_CSharp\bin\Release\Scoreboard_CSharp.exe.config
+D:\GitHub\Scoreboard_CSharp\bin\Release\Scoreboard_CSharp.exe
+D:\GitHub\Scoreboard_CSharp\bin\Release\Scoreboard_CSharp.pdb
+D:\GitHub\Scoreboard_CSharp\bin\Release\NauCom.dll
+D:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.TAIFBoard.resources
+D:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.Properties.Resources.resources
+D:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.csproj.GenerateResource.Cache
+D:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.exe
+D:\GitHub\Scoreboard_CSharp\obj\Release\Scoreboard_CSharp.pdb

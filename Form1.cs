@@ -102,13 +102,34 @@ namespace Scoreboard_CSharp
         int cnt = 0;
 
         int[] values;
+        int[] timeouts;
+
+        const int communicationTimeout = 6;
+
         Queue<String> data;
         private NauCom NC;
 
-        int oldSec;
-        bool clearPen;
+        int ticker = 0;
+        bool boolValue;
+        int skipTime10 = 0;
+        int skipPen10 = 0;
+        int match1 = 0;
+        int match10 = 0;
+        int period = 0;
+        int HScore = 0;
+        int GScore = 0;
+        int shots10 = 0;
+        int shots1 = 0;
+        int Gshots10 = 0;
+        int Gshots1 = 0;
+        int penNr10 = 0;
+        int penNr1 = 0;
+        int pensec10 = 0;
+        int pensec1 = 0;
+        int penmin = 0;
+        int homeScore10 = 0;
 
-        const int penaltyTimeout = 2;
+
         int[] homePenaltyAlive  = new int[3] { 0, 0, 0 };
         int[] homePenaltyOldVal = new int[3] { 0, 0, 0 };
         int[] guestPenaltyAlive = new int[3] { 0, 0, 0 };
@@ -213,10 +234,13 @@ namespace Scoreboard_CSharp
         private void initValues()
         {
             values = new int[(int)defs.END_OF_ENUM];
-            data = new Queue<String>();
-            for (int i = 0; i < (int)defs.END_OF_ENUM; i++)
-                values[i] = 0;
+            timeouts = new int[(int)defs.END_OF_ENUM];
 
+            data = new Queue<String>();
+            for (int i = 0; i < (int)defs.END_OF_ENUM; i++) { 
+                values[i] = 0;
+                timeouts[i] = 0;
+            }
 
             H1_pen = new penalty(HomePen1Image_lbl, HomePen1Time_lbl, HomePen1Player_lbl);
             H2_pen = new penalty(HomePen2Image_lbl, HomePen2Time_lbl, HomePen2Player_lbl);
@@ -248,6 +272,7 @@ namespace Scoreboard_CSharp
             if (Adress < (int)defs.END_OF_ENUM)
             {
                 values[Adress] = Value;
+                timeouts[Adress] = communicationTimeout;
       //          if (Adress >= Int32.Parse(filter_addr_start.Text) && Adress <= Int32.Parse(filter_addr_stop.Text)) {
              //       data.Enqueue(Adress.ToString() + " = " + values[Adress].ToString());
             //    }
@@ -299,142 +324,155 @@ namespace Scoreboard_CSharp
 
             return Value;
         }
+        private void debug()
+        {
+            const int number = 26;
+            // address, cnt, data1, data2, data3, data4, data5 
+            List<message> messages = new List<message>();
+
+            HomeTeam_edit.Text = "TAIF";
+            GuestTeam_edit.Text = "MUP"; 
+
+            cnt++;
+
+            Random Seed = new Random();
+            Random Rmatch10 = new Random(Seed.Next(0, 200));
+            Random Rmatch1 = new Random(Seed.Next(0, 200));
+            Random Rperiod = new Random(Seed.Next(0, 200));
+            Random RHScore = new Random(Seed.Next(0, 200));
+            Random RGScore = new Random(Seed.Next(0, 200));
+            Random Rshots10 = new Random(Seed.Next(0, 200));
+            Random Rshots1 = new Random(Seed.Next(0, 200));
+            Random RGshots10 = new Random(Seed.Next(0, 200));
+            Random RGshots1 = new Random(Seed.Next(0, 200));
+
+            Random RpenNr10 = new Random(Seed.Next(0, 200));
+            Random RpenNr1 = new Random(Seed.Next(0, 200));
+          
+            Random Rpensec10 = new Random(Seed.Next(0, 200));
+            Random Rpensec1 = new Random(Seed.Next(0, 200));
+            Random Rpenmin = new Random(Seed.Next(0, 200));
+            Random RhomeScore10 = new Random(Seed.Next(0, 200));  
+
+            cnt++;
+            if((!boolValue) && (cnt > (5*4)))
+            {
+                period = Rperiod.Next(1, 9);
+                match10 = Rmatch10.Next(0, 5);
+                match1 = Rmatch1.Next(1, 9);
+                HScore = RHScore.Next(0, 9);
+                GScore = RGScore.Next(0, 9);
+                shots10 = Rshots10.Next(0, 9);
+                shots1 = Rshots1.Next(0, 9);
+                Gshots10 = RGshots10.Next(0, 9);
+                Gshots1 = RGshots1.Next(0, 9);
+                penNr10 = RpenNr10.Next(0, 9);
+                penNr1 = RpenNr1.Next(0, 9);
+                penmin = Rpenmin.Next(0, 4);
+                pensec10 = Rpensec10.Next(0, 5);
+                pensec1 = Rpensec1.Next(0, 5);
+                cnt =0;
+                boolValue = true;
+            }
+
+                messages.Add(new message((int)defs.MATCH_PERIOD_10, 2, 0, period));
+
+                if (skipTime10 == 0)
+                {
+                    messages.Add(new message((int)defs.MATCH_10_MIN, 2, match10, match1));
+                }
+                else
+                {
+                    skipTime10--;
+                    messages.Add(new message((int)defs.MATCH_1_MIN, 1, match1));
+                }
+                messages.Add(new message((int)defs.MATCH_10_SEC, 2, match10, match1));
+
+                messages.Add(new message((int)defs.HOME_SCORE_10, 3, 0, HScore, 0));
+
+                messages.Add(new message((int)defs.GUEST_SCORE_10, 3, 0, GScore, 0));
+
+                messages.Add(new message((int)defs.HOME_SHOTS_10, 2, shots10, shots1));
+                messages.Add(new message((int)defs.GUEST_SHOTS_10, 2, Gshots10, Gshots1));
+
+                messages.Add(new message((int)defs.HOME_PEN1_NR_10, 2, penNr10, penNr1));
+
+                if (skipPen10 == 0)
+                {
+                    messages.Add(new message((int)defs.GUEST_PEN2_MINS, 3, penmin, pensec10, pensec1));
+                }
+                else
+                {
+                    skipPen10--;
+                    messages.Add(new message((int)defs.GUEST_PEN2_MINS, 2, penmin, pensec10, pensec1));
+            }
+
+            textBox1.Text = timeouts[(int)defs.GUEST_PEN2_1_SEC].ToString();
+
+
+
+
+            for (int index = 0; index < messages.Count; index++)
+            {
+                for (int i = 0; i < messages.ElementAt(index)._cnt; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data1);
+                            break;
+                        case 1:
+                            handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data2);
+                            break;
+                        case 2:
+                            handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data3);
+                            break;
+                        case 3:
+                            handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data4);
+                            break;
+                        case 4:
+                            handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data5);
+                            break;
+                    }
+                }
+            }
+            messages.Clear();
+        }
 
         private void timer250_Tick(object sender, EventArgs e)
         {
-            //Debug mode
-            /*  
+            //Debug mod 
+            debug();
 
-                    const int number = 26;
-                    // address, cnt, data1, data2, data3, data4, data5 
-                    List<message> messages = new List<message>();
+            for (int i = 0; i < (int)defs.END_OF_ENUM; i++)
+            {
+                if (timeouts[i] > 0)
+                {
+                    timeouts[i]--;
+                }
 
-                   HomeTeam_edit.Text = "TAIF";
-                      GuestTeam_edit.Text = "MUPP";
+                // -------------- write teams --------------
+                HomeTeam_lbl.Text = HomeTeam_edit.Text;
+                GuestTeam_lbl.Text = GuestTeam_edit.Text;
 
-                     messages.Add(new message((int)defs.MATCH_PERIOD_10, 2, 0, 1));
-                        messages.Add(new message((int)defs.MATCH_PERIOD_10, 2, 0, 2));
-                        messages.Add(new message((int)defs.MATCH_PERIOD_10, 2, 0, 3));
-                        messages.Add(new message((int)defs.MATCH_PERIOD_10, 2, 0, 4));
-                        messages.Add(new message((int)defs.MATCH_PERIOD_10, 2, 0, 1));
+                colon = ":";
 
-                        messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 1, 2, 1));
-                        messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 2, 4, 3));
-                        messages.Add(new message((int)defs.MATCH_10_MIN, 4, 1, 1, 3, 4));
-                        messages.Add(new message((int)defs.MATCH_10_MIN, 4, 2, 3, 4, 5));
-
-                        messages.Add(new message((int)defs.HOME_SCORE_10, 3, 0, 1, 0));
-                        messages.Add(new message((int)defs.GUEST_SCORE_10, 3, 0, 2, 0));
-                        messages.Add(new message((int)defs.HOME_SCORE_10, 3, 1, 3, 0));
-                        messages.Add(new message((int)defs.GUEST_SCORE_10, 3, 2, 4, 0));
+                //if(data.Count > 0)
+                //listBox2.Items.Add(data.Dequeue());
 
 
-                    messages.Add(new message((int)defs.HOME_SHOTS_10, 2, 0, 1));
-                    messages.Add(new message((int)defs.HOME_SHOTS_10, 2, 0, 9));
-                    messages.Add(new message((int)defs.HOME_SHOTS_10, 2, 1, 0));
-                    messages.Add(new message((int)defs.HOME_SHOTS_10, 2, 3, 5));
-
-                    messages.Add(new message((int)defs.GUEST_SHOTS_10, 2, 0, 1));
-                    messages.Add(new message((int)defs.GUEST_SHOTS_10, 2, 0, 9));
-                    messages.Add(new message((int)defs.GUEST_SHOTS_10, 2, 1, 0));
-                    messages.Add(new message((int)defs.GUEST_SHOTS_10, 2, 3, 5));
-
-
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_NR_10, 2, 1, 2));
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 1, 2));
-
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 2));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 3));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 4));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 5));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_NR_10, 2, 1, 2));
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 0));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 1));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 0));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 2));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 3));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 2));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 4));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 2));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 5));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 2));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 3));
-
-                    messages.Add(new message((int)defs.GUEST_PEN1_MINS, 3, 0, 4, 6));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 1));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 2));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 3));
-                    messages.Add(new message((int)defs.MATCH_10_MIN, 4, 0, 0, 0, 4));
-
-
-                    cnt++;
-
-                    if (cnt > (2*100))
-                    {
-                        cnt = 0;
-
-                        if (index < messages.Count)
-                        {
-                            for (int i = 0; i < messages.ElementAt(index)._cnt; i++)
-                            {
-                                switch(i)
-                                {
-                                    case 0:
-                                        handleNewValue(messages.ElementAt(index)._address+i, messages.ElementAt(index)._data1);
-                                        break;
-                                    case 1:
-                                        handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data2);
-                                        break;
-                                    case 2:
-                                        handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data3);
-                                        break;
-                                    case 3:
-                                        handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data4);
-                                        break;
-                                    case 4:
-                                        handleNewValue(messages.ElementAt(index)._address + i, messages.ElementAt(index)._data5);
-                                        break;
-                                }
-
-                            }
-                            index++;
-                        }
-                        else
-                        {
-                            index = 0;
-                        }
-                    }
-
-            */
-
-
-            // -------------- write teams --------------
-            HomeTeam_lbl.Text = HomeTeam_edit.Text;
-            GuestTeam_lbl.Text = GuestTeam_edit.Text;
-
-            colon = ":";
-
-            //if(data.Count > 0)
-            //listBox2.Items.Add(data.Dequeue());
-
-
-            // -------------- update clock -------------- 
-            Time_lbl.Text =
-                (values[(int)defs.MATCH_10_MIN] * 10 +  values[(int)defs.MATCH_1_MIN]).ToString() +
+                // -------------- update clock -------------- 
+                if (timeouts[(int)defs.MATCH_10_MIN] > 0)
+                { 
+                    Time_lbl.Text = (values[(int)defs.MATCH_10_MIN] * 10 + values[(int)defs.MATCH_1_MIN]).ToString() +
                     colon + (values[(int)defs.MATCH_10_SEC] * 10 + values[(int)defs.MATCH_1_SEC]).ToString();
+                }
+                else
+                {
+                    Time_lbl.Text = (values[(int)defs.MATCH_1_MIN]).ToString() +
+                    colon + (values[(int)defs.MATCH_10_SEC] * 10 + values[(int)defs.MATCH_1_SEC]).ToString();
+                }
+            }
 
             // -------------- update period -------------- 
             Period_lbl.Text =
@@ -453,17 +491,33 @@ namespace Scoreboard_CSharp
                 (values[(int)defs.HOME_SCORE_100] * 100 + values[(int)defs.HOME_SCORE_10] * 10 + values[(int)defs.HOME_SCORE_1]).ToString();
             GuestScore_lbl.Text =
                 (values[(int)defs.GUEST_SCORE_100] * 100 + values[(int)defs.GUEST_SCORE_10] * 10 + values[(int)defs.GUEST_SCORE_1]).ToString();
-           
+
             // --------------  Home penalty 1 -------------- 
-            HomePen1Player_lbl.Text =
-                values[(int)defs.HOME_PEN1_NR_10].ToString() + values[(int)defs.HOME_PEN1_NR_1].ToString();
+
+            if (timeouts[(int)defs.HOME_PEN1_NR_10] > 0)
+            {
+                HomePen1Player_lbl.Text =
+               values[(int)defs.HOME_PEN1_NR_10].ToString() + values[(int)defs.HOME_PEN1_NR_1].ToString();
+            }
+            else
+            {
+                HomePen1Player_lbl.Text = values[(int)defs.HOME_PEN1_NR_1].ToString();
+            }
+            
             HomePen1Time_lbl.Text =
                 values[(int)defs.HOME_PEN1_MINS].ToString() +
                     colon + values[(int)defs.HOME_PEN1_10_SEC].ToString() + values[(int)defs.HOME_PEN1_1_SEC].ToString();
-            
+
             // -------------- Home penalty 2 -------------- 
-            HomePen2Player_lbl.Text =
-                values[(int)defs.HOME_PEN2_NR_10].ToString() + values[(int)defs.HOME_PEN2_NR_1].ToString();
+            if (timeouts[(int)defs.HOME_PEN2_NR_10] > 0)
+            {
+                HomePen2Player_lbl.Text =
+               values[(int)defs.HOME_PEN2_NR_10].ToString() + values[(int)defs.HOME_PEN2_NR_1].ToString();
+            }
+            else
+            {
+                HomePen2Player_lbl.Text = values[(int)defs.HOME_PEN2_NR_1].ToString();
+            }
             HomePen2Time_lbl.Text =
                 values[(int)defs.HOME_PEN2_MINS].ToString() +
                     colon + values[(int)defs.HOME_PEN2_10_SEC].ToString() + values[(int)defs.HOME_PEN2_1_SEC].ToString();
@@ -476,45 +530,53 @@ namespace Scoreboard_CSharp
                     colon + values[(int)defs.HOME_PEN3_10_SEC].ToString() + values[(int)defs.HOME_PEN3_1_SEC].ToString();
 
             // --------------  Guest penalty 1 -------------- 
-            GuestPen1Player_lbl.Text =
-                values[(int)defs.GUEST_PEN1_NR_10].ToString() + values[(int)defs.GUEST_PEN1_NR_1].ToString();
+
+            if (timeouts[(int)defs.GUEST_PEN1_NR_10] > 0)
+            {
+                GuestPen1Player_lbl.Text =
+                    values[(int)defs.GUEST_PEN1_NR_10].ToString() + values[(int)defs.GUEST_PEN1_NR_1].ToString();
+            }
+            else
+            {
+                GuestPen1Player_lbl.Text = values[(int)defs.GUEST_PEN1_NR_1].ToString();
+            }
+
             GuestPen1Time_lbl.Text =
                 values[(int)defs.GUEST_PEN1_MINS].ToString() +
                     colon + values[(int)defs.GUEST_PEN1_10_SEC].ToString() + values[(int)defs.GUEST_PEN1_1_SEC].ToString();
 
             // -------------- Guest penalty 2 -------------- 
-            GuestPen2Player_lbl.Text =
-                values[(int)defs.GUEST_PEN2_NR_10].ToString() + values[(int)defs.GUEST_PEN2_NR_1].ToString();
+            if (timeouts[(int)defs.GUEST_PEN2_NR_10] > 0)
+            {
+                GuestPen2Player_lbl.Text =
+                    values[(int)defs.GUEST_PEN2_NR_10].ToString() + values[(int)defs.GUEST_PEN2_NR_1].ToString();
+            }
+            else
+            {
+                GuestPen2Player_lbl.Text = values[(int)defs.GUEST_PEN2_NR_1].ToString();
+            }
+
+
             GuestPen2Time_lbl.Text =
                 values[(int)defs.GUEST_PEN2_MINS].ToString() +
                     colon + values[(int)defs.GUEST_PEN2_10_SEC].ToString() + values[(int)defs.GUEST_PEN2_1_SEC].ToString();
 
             // -------------- Guest penalty 3 -------------- 
+
             GuestPen3Player_lbl.Text =
                 values[(int)defs.GUEST_PEN3_NR_10].ToString() + values[(int)defs.GUEST_PEN3_NR_1].ToString();
             GuestPen3Time_lbl.Text =
                 values[(int)defs.GUEST_PEN3_MINS].ToString() +
                    colon + values[(int)defs.GUEST_PEN3_10_SEC].ToString() + values[(int)defs.GUEST_PEN3_1_SEC].ToString();
 
+            H1_pen.setAlive(timeouts[(int)defs.HOME_PEN1_1_SEC] > 0);
+            H2_pen.setAlive(timeouts[(int)defs.HOME_PEN2_1_SEC] > 0);
+            G1_pen.setAlive(timeouts[(int)defs.GUEST_PEN1_1_SEC] > 0);
+            G2_pen.setAlive(timeouts[(int)defs.GUEST_PEN2_1_SEC] > 0);
 
-            
-            // make all penalties visible
-            if(oldSec != values[(int)defs.MATCH_1_SEC])
-            {
-                H1_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN1_1_SEC]);
-                H2_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN2_1_SEC]);
-          //      H3_pen.aliveCheck_Tick1Sec(values[(int)defs.HOME_PEN3_1_SEC]);
 
-                G1_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN1_1_SEC]);
-                G2_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN2_1_SEC]);
-             //   G3_pen.aliveCheck_Tick1Sec(values[(int)defs.GUEST_PEN3_1_SEC]);
-                colonVisible = !colonVisible;
-            }
-            oldSec = values[(int)defs.MATCH_1_SEC];
-
-            
         }
-    
+
         private void Connect_btn_Click(object sender, EventArgs e)
         {
             NC = new NauCom(Protocols.NG12, "ANY", NauBeeChannels.CHANNEL_0, true);
@@ -591,6 +653,17 @@ namespace Scoreboard_CSharp
             data.Clear();
             listBox2.Items.Clear();
         }
+
+        private void time_10_TextChanged(object sender, EventArgs e)
+        {
+            Int32.TryParse(time_10.Text, out skipTime10);
+        }
+
+        private void pen10skip_TextChanged(object sender, EventArgs e)
+        {
+            Int32.TryParse(pen10skip.Text, out skipPen10);
+            
+        }
     }
 
     public class penalty
@@ -599,9 +672,6 @@ namespace Scoreboard_CSharp
         Label time_lbl;
         Label player_lbl;
         bool visible;
-        int oldValue =0;
-        int alive=0;
-        const int aliveTimeout = 2;
 
         public penalty(Label image, Label time, Label player)
         {
@@ -615,23 +685,14 @@ namespace Scoreboard_CSharp
             player_lbl.Visible = visible;
         }
 
-        public void aliveCheck_Tick1Sec(int penaltySec)
+        public void setAlive(bool alive)
         {
-            if (penaltySec != oldValue)
+            if (alive)
             {
-                oldValue = penaltySec;
-                alive = aliveTimeout;
                 image_lbl.Visible = true;
                 time_lbl.Visible = true;
                 player_lbl.Visible = true;
 
-            }
-            if (alive > 0)
-            {
-                alive--;
-                image_lbl.Visible = true;
-                time_lbl.Visible = true;
-                player_lbl.Visible = true;
             }
             else
             {

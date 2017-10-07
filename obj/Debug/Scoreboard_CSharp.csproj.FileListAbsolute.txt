@@ -8,15 +8,6 @@ C:\Slask\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.Properties.Resources.reso
 C:\Slask\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.csproj.GenerateResource.Cache
 C:\Slask\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.exe
 C:\Slask\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.pdb
-E:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.exe.config
-E:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.exe
-E:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.pdb
-E:\GitHub\Scoreboard_CSharp\bin\Debug\NauCom.dll
-E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.TAIFBoard.resources
-E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.Properties.Resources.resources
-E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.csproj.GenerateResource.Cache
-E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.exe
-E:\GitHub\Scoreboard_CSharp\obj\Debug\Scoreboard_CSharp.pdb
 D:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.exe.config
 D:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.exe
 D:\GitHub\Scoreboard_CSharp\bin\Debug\Scoreboard_CSharp.pdb
